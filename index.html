@@ -37,20 +37,52 @@
                 })
         }
 
-        function do_download(url, outputFile) {
+        async function do_download(url, outputFile) {
             // window.location.href = url
-            fetch(url)
-                .then(res => res.blob())
-                .then(blob => {
-                    var a = document.createElement('a')
-                    a.href = window.URL.createObjectURL(blob)
-                    a.download = outputFile
-                    a.click()
-                    window.URL.revokeObjectURL(url)
-                })
-                .catch(err => {
-                    console.error(err)
-                })
+            // fetch(url)
+            //     .then(res => res.blob())
+            //     .then(blob => {
+            //         var a = document.createElement('a')
+            //         a.href = window.URL.createObjectURL(blob)
+            //         a.download = outputFile
+            //         a.click()
+            //         window.URL.revokeObjectURL(url)
+            //     })
+            //     .catch(err => {
+            //         console.error(err)
+            //     })
+
+            let response = await fetch(url)
+            const reader = response.body.getReader()
+
+            // compressed length, don't know original length
+            // todo: get original length from metadata file
+            // todo: show download progress
+            const contentLen = response.headers.get('Content-Length')
+            const contentEncoding = response.headers.get('Content-Encoding') // gzip
+
+            let receivedLen = 0
+            let chunks = []
+
+            while (true) {
+                // 从流中获取的数据是一个 Uint8Array
+                const {done, value} = await reader.read()
+
+                if (done) {
+                    break
+                }
+                chunks.push(value)
+                receivedLen += value.length
+
+                console.log(`received ${receivedLen} of ${contentLen}`)
+            }
+
+            var a = document.createElement('a')
+            a.href = window.URL.createObjectURL(new Blob(chunks, {type: 'application/octet-stream'}))
+            a.download = outputFile
+            a.click()
+            window.URL.revokeObjectURL(url)
+
         }
     </script>
 </body>
