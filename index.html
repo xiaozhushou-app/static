@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>微商小助手</title>
+
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" type="text/css" href="/css/look_great.css">
+    <!-- <link rel="stylesheet" href="https://unpkg.com/boltcss/bolt.min.css"> -->
+</head>
+<body>
+    <button onclick="download('little_helper')">下载最新版微商小助手</button>
+
+    <br />
+    <br />
+
+    <button onclick="download('download_helper')">下载最新版 download-helper</button>
+
+    <script type="text/javascript" charset="utf-8">
+        function download(app) {
+            // const base_url = "/apps/little_helper/"
+            const base_url = "https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@latest/"
+            const metadata_url = `${base_url}apps/${app}/apk/release/output-metadata.json`
+
+
+            fetch(metadata_url)
+                .then(res => res.json())
+                .then(json => {
+                    console.log("res: ", json)
+                    let outputFile = json.elements[0].outputFile
+                    console.log('outputFile: ', outputFile)
+
+                    const apk_url = `${base_url}apps/${app}/apk/release/${outputFile}.js`
+
+                    do_download(apk_url, outputFile)
+                })
+        }
+
+        function do_download(url, outputFile) {
+            // window.location.href = url
+            fetch(url)
+                .then(res => res.blob())
+                .then(blob => {
+                    var a = document.createElement('a')
+                    a.href = window.URL.createObjectURL(blob)
+                    a.download = outputFile
+                    a.click()
+                    window.URL.revokeObjectURL(url)
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+        }
+    </script>
+</body>
+</html>
+
