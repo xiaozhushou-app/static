@@ -1,0 +1,21 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "de.kaixin.download_helper",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 1,
+      "versionName": "1.0.8",
+      "outputFile": "download-helper-release-v1.0.8.apk",
+      "apkFileSizeCalculatedByHangj": 2994235
+    }
+  ],
+  "elementType": "File"
+}
