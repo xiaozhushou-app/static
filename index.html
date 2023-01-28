@@ -6,8 +6,10 @@
     <title>微商小助手</title>
 
     <link rel="icon" href="data:,">
-    <link rel="stylesheet" type="text/css" href="/css/look_great.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@latest/css/look_great.css">
     <!-- <link rel="stylesheet" href="https://unpkg.com/boltcss/bolt.min.css"> -->
+
+    <script defer src="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@latest/js/apk-download.js"></script>
 </head>
 <body>
     <button onclick="download('little_helper')">下载最新版微商小助手</button>
@@ -16,75 +18,6 @@
     <br />
 
     <button onclick="download('download_helper')">下载最新版 download-helper</button>
-
-    <script type="text/javascript" charset="utf-8">
-        function download(app) {
-            // const base_url = "/apps/little_helper/"
-            const base_url = "https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@latest/"
-            const metadata_url = `${base_url}apps/${app}/apk/release/output-metadata.json`
-
-
-            fetch(metadata_url)
-                .then(res => res.json())
-                .then(json => {
-                    console.log("res: ", json)
-                    let outputFile = json.elements[0].outputFile
-                    console.log('outputFile: ', outputFile)
-
-                    const apk_url = `${base_url}apps/${app}/apk/release/${outputFile}.js`
-
-                    do_download(apk_url, outputFile)
-                })
-        }
-
-        async function do_download(url, outputFile) {
-            // window.location.href = url
-            // fetch(url)
-            //     .then(res => res.blob())
-            //     .then(blob => {
-            //         var a = document.createElement('a')
-            //         a.href = window.URL.createObjectURL(blob)
-            //         a.download = outputFile
-            //         a.click()
-            //         window.URL.revokeObjectURL(url)
-            //     })
-            //     .catch(err => {
-            //         console.error(err)
-            //     })
-
-            let response = await fetch(url)
-            const reader = response.body.getReader()
-
-            // compressed length, don't know original length
-            // todo: get original length from metadata file
-            // todo: show download progress
-            const contentLen = response.headers.get('Content-Length')
-            const contentEncoding = response.headers.get('Content-Encoding') // gzip
-
-            let receivedLen = 0
-            let chunks = []
-
-            while (true) {
-                // 从流中获取的数据是一个 Uint8Array
-                const {done, value} = await reader.read()
-
-                if (done) {
-                    break
-                }
-                chunks.push(value)
-                receivedLen += value.length
-
-                console.log(`received ${receivedLen} of ${contentLen}`)
-            }
-
-            var a = document.createElement('a')
-            a.href = window.URL.createObjectURL(new Blob(chunks, {type: 'application/octet-stream'}))
-            a.download = outputFile
-            a.click()
-            window.URL.revokeObjectURL(url)
-
-        }
-    </script>
 </body>
 </html>
 
