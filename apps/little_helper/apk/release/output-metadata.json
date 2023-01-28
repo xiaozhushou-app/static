@@ -13,7 +13,8 @@
       "attributes": [],
       "versionCode": 1,
       "versionName": "1.5.81",
-      "outputFile": "little-helper-release-v1.5.81.apk"
+      "outputFile": "little-helper-release-v1.5.81.apk",
+      "apkFileSizeCalculatedByHangj": 4315482
     }
   ],
   "elementType": "File"
