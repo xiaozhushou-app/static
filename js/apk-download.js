@@ -33,24 +33,24 @@ async function do_download(app, url, outputFile, fileSize, cb_progress) {
     }
     is_donwloading[url] = true
 
-    // fetch(url)
-    //     .then(res => res.blob())
-    //     .then(blob => {
-    //         var a = document.createElement('a')
-    //         a.href = window.URL.createObjectURL(blob)
-    //         a.download = outputFile
-    //         a.click()
-    //         window.URL.revokeObjectURL(url)
-    //     })
-    //     .catch(err => {
-    //         console.error(err)
-    //         alert(err)
-    //     })
-    //     .finally(() => {
-    //         is_donwloading[url] = false
-    //     })
+    fetch(url)
+        .then(res => res.blob())
+        .then(blob => {
+            var a = document.createElement('a')
+            a.href = window.URL.createObjectURL(blob)
+            a.download = outputFile
+            a.click()
+            window.URL.revokeObjectURL(url)
+        })
+        .catch(err => {
+            console.error(err)
+            alert(err)
+        })
+        .finally(() => {
+            is_donwloading[url] = false
+        })
 
-    // return
+    return
 
     fetch(url)
         .then(async res => {
