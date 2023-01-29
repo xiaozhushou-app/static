@@ -12,12 +12,27 @@
     <script defer src="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@latest/js/apk-download.js"></script>
 </head>
 <body>
-    <button onclick="download('little_helper')">下载最新版微商小助手</button>
+    <button onclick="download('little_helper', cb_download_progress)">下载最新版微商小助手</button>
+    <div id="little_helper_download_progress" style="visibility: hidden;">
+        <label for="little_helper">小助手下载进度:</label>
+        <progress id="little_helper" value="0" max="100" />
+    </div>
 
     <br />
     <br />
 
-    <button onclick="download('download_helper')">下载最新版 download-helper</button>
+    <button onclick="download('download_helper', cb_download_progress)">下载最新版 download-helper</button>
+    <div id="download_helper_download_progress" style="visibility: hidden;">
+        <label for="download_helper">小助手下载进度:</label>
+        <progress id="download_helper" value="0" max="100" />
+    </div>
+
+    <script type="text/javascript">
+        function cb_download_progress(app, url, max, value) {
+            document.querySelector(`#${app}_download_progress`).style.visibility = 'visible'
+            document.querySelector(`#${app}`).value = value / max * 100
+        }
+    </script>
 </body>
 </html>
 
