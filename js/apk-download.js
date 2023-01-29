@@ -7,7 +7,8 @@ function download(app, cb_progress) {
         .then(res => res.json())
         .then(json => {
             console.log("res: ", json)
-            let outputFile = json.elements[0].outputFile
+            const outputFile = json.elements[0].outputFile
+            const versionName = json.elements[0].versionName
             const fileSize = json.elements[0].apkFileSizeCalculatedByHangj
             console.log('outputFile: ', outputFile)
             console.log('fileSize:', fileSize)
@@ -52,7 +53,7 @@ async function do_download(app, url, outputFile, fileSize, cb_progress) {
     // return
 
     fetch(url)
-        .then(res => {
+        .then(async res => {
             const reader = res.body.getReader()
 
             const contentLen = res.headers.get('Content-Length') // compressed file size
