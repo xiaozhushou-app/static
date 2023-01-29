@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/css/look_great.css">
     <!-- <link rel="stylesheet" href="https://unpkg.com/boltcss/bolt.min.css"> -->
 
-    <script defer src="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/js/apk-download.js"></script>
+    <!-- <script defer src="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/js/apk-download.js"></script> -->
 </head>
 <body>
     <button onclick="download('little_helper', cb_download_progress)">下载最新版微商小助手</button>
@@ -32,6 +32,11 @@
             document.querySelector(`#${app}_download_progress`).style.visibility = 'visible'
             document.querySelector(`#${app}`).value = value / max * 100
         }
+
+        let script = document.createElement('script')
+        script.defer = true
+        script.src = location.hostname.includes('xiaozhushou') ? 'https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/js/apk-download.js' : '/js/apk-download.js'
+        document.head.appendChild(script)
     </script>
 </body>
 </html>

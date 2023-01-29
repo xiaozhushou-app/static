@@ -1,5 +1,9 @@
+function need_cdn() {
+    return location.hostname.includes('xiaozhushou')
+}
+
 function download(app, cb_progress) {
-    const base_url = "https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/"
+    const base_url = need_cdn() ? "https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/" : "/"
     const metadata_url = `${base_url}apps/${app}/apk/release/output-metadata.json`
 
 
@@ -14,7 +18,7 @@ function download(app, cb_progress) {
             console.log('fileSize:', fileSize)
 
 
-            const apk_url = `${base_url}apps/${app}/apk/release/${outputFile}.js`
+            const apk_url = `${base_url}apps/${app}/apk/release/${outputFile}`
 
             do_download(app, apk_url, outputFile, fileSize, cb_progress)
         })
@@ -28,7 +32,13 @@ function download(app, cb_progress) {
 let is_donwloading = {}
 
 async function do_download(app, url, outputFile, fileSize, cb_progress) {
-    // window.location.href = url
+    if (!need_cdn()) {
+        window.location.href = url
+        return
+    }
+
+    url += ".js"
+
     if (is_donwloading[url]) {
         return
     }
