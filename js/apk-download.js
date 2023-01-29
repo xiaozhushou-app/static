@@ -1,5 +1,5 @@
 function download(app, cb_progress) {
-    const base_url = "https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@latest/"
+    const base_url = "https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/"
     const metadata_url = `${base_url}apps/${app}/apk/release/output-metadata.json`
 
 
