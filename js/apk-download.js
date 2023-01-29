@@ -55,8 +55,8 @@ async function do_download(app, url, outputFile, fileSize, cb_progress) {
         .then(res => {
             const reader = res.body.getReader()
 
-            const contentLen = response.headers.get('Content-Length') // compressed file size
-            const contentEncoding = response.headers.get('Content-Encoding') // gzip
+            const contentLen = res.headers.get('Content-Length') // compressed file size
+            const contentEncoding = res.headers.get('Content-Encoding') // gzip
 
             let receivedLen = 0
             let chunks = []
