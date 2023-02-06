@@ -12,9 +12,9 @@
       "filters": [],
       "attributes": [],
       "versionCode": 1,
-      "versionName": "1.5.98",
-      "outputFile": "little-helper-release-v1.5.98.apk",
-      "apkFileSizeCalculatedByHangj": 4422318
+      "versionName": "1.5.100",
+      "outputFile": "little-helper-release-v1.5.100.apk",
+      "apkFileSizeCalculatedByHangj": 4422314
     }
   ],
   "elementType": "File"
