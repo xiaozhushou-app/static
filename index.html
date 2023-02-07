@@ -10,18 +10,55 @@
     <!-- <link rel="stylesheet" href="https://unpkg.com/boltcss/bolt.min.css"> -->
 
     <!-- <script defer src="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/js/apk-download.js"></script> -->
+
+    <style>
+        .little_helper {
+            position: fixed;
+            left: 50%;
+            top: 30%;
+            text-align: center;
+            font-size: 16px;
+            color: #FFFFFF;
+            margin: 25px 0;
+            width: 335px;
+            height: 45px;
+            background: #E0E0E0;
+            border-radius: 5px;
+            background-color: #1B68FD;
+            transform: translateX(-50%);
+        }
+        .download_helper {
+            position: absolute;
+            text-align: center;
+            bottom: 0;
+            font-size: 16px;
+            margin: 25px 0;
+            width: 335px;
+            height: 45px;
+            line-height: 45px;
+            border-radius: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
 </head>
 <body>
-    <button onclick="download('little_helper', cb_download_progress)">下载最新版微商小助手</button>
-    <div id="little_helper_download_progress" style="visibility: hidden;">
-        <label for="little_helper">小助手下载进度:</label>
-        <progress id="little_helper" value="0" max="100" />
-    </div>
+    <!-- <div class="little_helper"> -->
+        <center>
+            <button class="little_helper" onclick="download('little_helper', cb_download_progress)">
+                <font size="5">下载最新版微商小助手</font>
+            </button>
+        </center>
+        <div id="little_helper_download_progress" style="visibility: hidden;">
+            <label for="little_helper">小助手下载进度:</label>
+            <progress id="little_helper" value="0" max="100" />
+        </div>
+    <!-- </div> -->
 
     <br />
     <br />
 
-    <button onclick="download('download_helper', cb_download_progress)">下载最新版 download-helper</button>
+    <button class="download_helper" onclick="download('download_helper', cb_download_progress)">下载最新版 download-helper</button>
     <div id="download_helper_download_progress" style="visibility: hidden;">
         <label for="download_helper">小助手下载进度:</label>
         <progress id="download_helper" value="0" max="100" />
