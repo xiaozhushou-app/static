@@ -42,7 +42,7 @@
                 let label = document.createElement('label')
                 let div = document.createElement('div')
                 label.innerHTML = o + ':'
-                div.innerHTML = o
+                div.innerHTML = userInfo[o]
                 p.appendChild(label)
                 p.appendChild(div)
 
