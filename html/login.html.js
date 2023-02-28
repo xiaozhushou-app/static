@@ -140,7 +140,7 @@
                 app.setJwt(res.jwt)
                 app.setUserInfo(JSON.stringify(res.user_info))
                 app.toast(app.getJwt())
-                app.loginSuccess()
+                app.dismiss()
             })
         }
     </script>
