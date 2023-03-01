@@ -10,6 +10,58 @@
 
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
+    <style type="text/css">
+        .login {
+            position: relative;
+            padding: 8px 16px;
+            background: #009579;
+            border: none;
+            outline: none;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .login:active {
+            background: #007a63;
+        }
+
+        .login__text {
+            color: #ffffff;
+            transition: all 0.2s;
+        }
+
+        .button--loading .login__text {
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .button--loading::after {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            border: 4px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: button-loading-spinner 1s ease infinite;
+        }
+
+        @keyframes button-loading-spinner {
+            from {
+                transform: rotate(0turn);
+            }
+
+            to {
+                transform: rotate(1turn);
+            }
+        }
+    </style>
+
 </head>
 <body>
 
@@ -35,7 +87,9 @@
         <!-- <label for="verify-code">验证码:</label> -->
         <input type="text" id="verify-code" disabled="true" oninput="onVerifyCodeInput()" name="code" placeholder="请输入验证码"/>
 
-        <button id="login" disabled="true" onclick="login()">登录</button>
+        <button type="button" class="login" id="login" disabled="true" onclick="login()">
+            <span class="login__text">登录</span>
+        </button>
     </div>
 
     <script type="text/javascript">
@@ -111,10 +165,18 @@
             })
         }
         function login() {
+            const theButton = document.querySelector("#login")
+
             let data = {
                 email: document.querySelector('#email').value,
                 code: document.querySelector('#verify-code').value,
             }
+
+            if (theButton.classList.contains('button--loading')) {
+                return;
+            }
+            theButton.classList.toggle("button--loading")
+
             fetch('/app/login', {
                 method: 'POST',
                 headers: {
@@ -139,8 +201,16 @@
                 }
                 app.setJwt(res.jwt)
                 app.setUserInfo(JSON.stringify(res.user_info))
-                app.toast(app.getJwt())
+                // app.toast(app.getJwt())
                 app.dismiss()
+            })
+            .catch(e => {
+                console.error('Error:', e)
+                theButton.classList.toggle("button--loading")
+
+                if (!window.app) return;
+                app.log(`Error: ${JSON.stringify(e)}`)
+                app.alert(`Error: ${JSON.stringify(e)}`)
             })
         }
     </script>
