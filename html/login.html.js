@@ -156,7 +156,10 @@
                     return
                 }
                 app.setJwt(res.jwt)
-                app.setUserInfo(JSON.stringify(res.user_info))
+                if (app.getUserInfo() == "") {
+                    return
+                }
+                // app.setUserInfo(JSON.stringify(res.user_info))
                 // app.toast(app.getJwt())
                 app.dismiss()
             })

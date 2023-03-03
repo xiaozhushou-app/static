@@ -23,32 +23,32 @@
         <input type="submit" class="button" value="提交">
     </form>
 
-    <button onclick="dismiss()">关闭页面</button>
+    <!-- <button onclick="dismiss()">关闭页面</button> -->
 
     <script type="text/javascript">
         function dismiss() {
-            if (!window.app) {
-                return
-            }
-            app.dismiss();
+            if (window.app) app.dismiss()
         }
 
         function exchange(event) {
             event.preventDefault();
             const form = event.target
-            const formData = new FormData(form)
-            const theButton = form.querySelector('[type="submit"]')
 
+            const method = form.method
+            const action = form.action
+            const formData = new FormData(form)
+
+            const theButton = form.querySelector('[type="submit"]')
             if (theButton.classList.contains('button--loading')) {
                 return;
             }
             theButton.classList.toggle("button--loading")
 
-            fetch('/app/exchange-premium-code', {
-                method: 'POST',
+            fetch(action, {
+                method: method,
                 body: formData,
             })
-            .then(res => async res => {
+            .then(async res => {
                 if (res.ok) {
                     return await res.json()
                 }
@@ -69,7 +69,7 @@
                     return
                 }
                 app.setJwt(res.jwt)
-                app.setUserInfo(JSON.stringify(res.user_info))
+                // app.setUserInfo(JSON.stringify(res.user_info))
                 // app.toast(app.getJwt())
                 // app.dismiss()
                 window.onload() // refresh page
