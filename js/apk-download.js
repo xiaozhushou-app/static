@@ -7,7 +7,7 @@ function download(app, cb_progress) {
     const metadata_url = `${base_url}apps/${app}/apk/release/output-metadata.json`
 
 
-    fetch(metadata_url)
+    fetch(metadata_url, { cache: need_cdn() ? "default" : "no-cache" })
         .then(res => res.json())
         .then(json => {
             console.log("res: ", json)
@@ -45,7 +45,7 @@ async function do_download(app, url, outputFile, fileSize, cb_progress) {
     is_donwloading[url] = true
 
 
-    fetch(url)
+    fetch(url, { cache: need_cdn() ? "default" : "no-cache" })
         .then(async res => {
             const reader = res.body.getReader()
 
