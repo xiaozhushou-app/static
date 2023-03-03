@@ -5,8 +5,8 @@ html {
     max-width: 70ch;
     padding: 3em 1em;
     margin: auto;
-    line-height: 1.75;
-    font-size: 1.25em;
+/*    line-height: 1.75;
+    font-size: 1.25em;*/
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -15,22 +15,14 @@ h1,h2,h3,h4,h5,h6 {
 
 p,ul,ol {
     margin-bottom: 2em;
-    color: #1d1d1d;
-    font-family: sans-serif;
+/*    color: #1d1d1d;
+    font-family: sans-serif;*/
 }
 
 .button {
     position: relative;
-    padding: 8px 16px;
-    background: #009579;
-    border: none;
-    outline: none;
-    border-radius: 2px;
-    cursor: pointer;
-}
-
-.button:active {
-    background: #007a63;
+/*    padding: 8px 16px;
+    cursor: pointer;*/
 }
 
 .button__text {

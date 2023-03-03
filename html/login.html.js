@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="data:,">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/css/look_great.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/css/look_great.css">
 
     <title>Try Turnstile</title>
 
@@ -146,7 +147,6 @@
                 // errcode
                 // errmsg
                 // jwt
-                // user_info
                 if (!window.app) return;
 
 

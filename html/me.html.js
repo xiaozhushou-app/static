@@ -6,7 +6,8 @@
     <title>test</title>
 
     <link rel="icon" href="data:,">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/css/look_great.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/css/look_great.css">
 </head>
 <body>
     <h2>hello world</h2>
@@ -20,7 +21,9 @@
         <input type="text" id="premium_code" name="premium_code" required placeholder="请输入激活码">
         <input type="text" id="uuid" name="uuid" hidden="true" required placeholder="">
         <br>
-        <input type="submit" class="button" value="提交">
+        <button type="submit" class="button">
+            <span class="button__text">提交</span>
+        </button>
     </form>
 
     <!-- <button onclick="dismiss()">关闭页面</button> -->
@@ -59,7 +62,6 @@
                 // errcode
                 // errmsg
                 // jwt
-                // user_info
                 if (!window.app) return;
 
 
@@ -88,8 +90,8 @@
             if (!window.app) return;
             // app.dismiss()
             // app.log()
+            // app.setUrl()
             // app.getUserInfo()
-            // app.setUserInfo()
             // app.setJwt()
             // app.getJwt()
             // app.toast()
