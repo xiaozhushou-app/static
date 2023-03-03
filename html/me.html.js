@@ -18,7 +18,7 @@
 
     <form id="exchange_premium_code" method="POST" action="/app/exchange-premium-code" enctype="multipart/form-data" onsubmit="exchange(event)">
         <label for="premium_code">激活码：</label><br>
-        <input type="text" id="premium_code" name="premium_code" required placeholder="请输入激活码">
+        <textarea name="premium_code" required placeholder="请输入激活码"></textarea>
         <input type="text" id="uuid" name="uuid" hidden="true" required placeholder="">
         <br>
         <button type="submit" class="button">
