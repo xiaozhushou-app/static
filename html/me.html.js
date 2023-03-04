@@ -3,17 +3,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>test</title>
+    <title>我</title>
 
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/css/look_great.css">
 </head>
 <body>
-    <h2>hello world</h2>
-
     <div id="userInfo"></div>
-
 
 
     <form id="exchange_premium_code" method="POST" action="/app/exchange-premium-code" enctype="multipart/form-data" onsubmit="exchange(event)">
@@ -77,13 +74,13 @@
                 window.onload() // refresh page
             })
             .catch(e => {
-                theButton.classList.toggle("button--loading")
                 console.error('Error:', e)
 
                 if (!window.app) return;
                 app.log(`Error: ${e}`)
                 app.alert(`Error: ${e}`)
             })
+            .finally(() => theButton.classList.toggle("button--loading"))
         }
 
         window.onload = function() {

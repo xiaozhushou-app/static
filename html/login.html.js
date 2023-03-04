@@ -14,8 +14,7 @@
 </head>
 <body>
 
-    <div>
-        <!-- <label for="email">邮箱:</label><br> -->
+    <form action="/app/login" method="POST" onsubmit="login(event)">
         <input
             type="email"
             id="email"
@@ -33,13 +32,12 @@
             <button id="fetchVerificationCode" disabled="true" onclick="fetchVerificationCode()">发送验证码</button>
         </div>
 
-        <!-- <label for="verify-code">验证码:</label> -->
-        <input type="text" id="verify-code" disabled="true" oninput="onVerifyCodeInput()" name="code" placeholder="请输入验证码"/>
+        <input type="text" name="verify-code" id="verify-code" disabled="true" oninput="onVerifyCodeInput()" required placeholder="请输入验证码"/>
 
-        <button type="button" class="button" id="login" disabled="true" onclick="login()">
+        <button type="submit" class="button" id="login" disabled="true">
             <span class="button__text">登录</span>
         </button>
-    </div>
+    </form>
 
     <script type="text/javascript">
         function onTokenGenerated(token) {
@@ -116,21 +114,24 @@
                 }
             })
         }
-        function login() {
-            const theButton = document.querySelector("#login")
+        function login(event) {
+            event.preventDefault()
+            const form = event.target
 
-            let data = {
-                email: document.querySelector('#email').value,
-                code: document.querySelector('#verify-code').value,
-            }
+            const method = form.method
+            const action = form.action
+            const formData = new FormData(form)
+            const data = Object.fromEntries(formData.entries())
 
+            const theButton = form.querySelector('[type="submit"]')
             if (theButton.classList.contains('button--loading')) {
                 return;
             }
             theButton.classList.toggle("button--loading")
 
-            fetch('/app/login', {
-                method: 'POST',
+
+            fetch(action, {
+                method: method,
                 headers: {
                     'Content-Type': 'application/json' // 'Content-Type': 'application/x-www-form-urlencoded',
                 },
@@ -164,13 +165,13 @@
                 app.dismiss()
             })
             .catch(e => {
-                theButton.classList.toggle("button--loading")
                 console.error('Error:', e)
 
                 if (!window.app) return;
                 app.log(`Error: ${e}`)
                 app.alert(`Error: ${e}`)
             })
+            .finally(() => theButton.classList.toggle("button--loading"))
         }
     </script>
 
