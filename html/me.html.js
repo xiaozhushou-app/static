@@ -18,6 +18,11 @@
         <label for="created_at">账号创建时间：</label><span id="created_at"></span><br>
     </div>
 
+    <span>朋友圈文案过滤：</span>
+    <label class="toggle">
+        <input type="checkbox" id="pyq_title_filter_toggle" onclick="onPyqTitleFilterClick(event)">
+        <span class="slider round"></span>
+    </label>
 
     <form id="exchange_premium_code" method="POST" action="/app/exchange-premium-code" enctype="multipart/form-data" onsubmit="exchange(event)">
         <label for="premium_code">激活码：</label><br>
@@ -98,6 +103,10 @@
           return [year, month, day].join('-') + ' ' + [date.getHours(), date.getMinutes(), date.getSeconds()].join(':');
         }
 
+        function onPyqTitleFilterClick(event) {
+            if (!window.app) return;
+            app.setFilterToggle(event.target.checked)
+        }
 
         window.onload = function() {
             if (!window.app) return;
@@ -109,11 +118,17 @@
             // app.getJwt()
             // app.toast()
             // app.alert()
+            // app.getFilterToggle()
+            // app.setFilterToggle()
+            // app.filterTitle()
+            // app.getFilterTitleRules()
+            // app.setFilterTitleRules()
 
             let userInfo = JSON.parse(app.getUserInfo())
             window.userInfo = userInfo
 
             document.querySelector('#uuid').value = userInfo.uuid
+            document.querySelector('#pyq_title_filter_toggle').checked = app.getFilterToggle()
 
             let container = document.querySelector('#userInfo')
 
