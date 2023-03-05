@@ -14,25 +14,23 @@
 </head>
 <body>
 
-    <form action="/app/login" method="POST" onsubmit="login(event)">
+    <form action="/app/login" method="POST" onsubmit="doLogin(event)">
         <input
             type="email"
             id="email"
             name="email"
             maxlength="64"
             required
-            pattern=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-            oninput="onEmailInput()"
-            onchange="onEmailChange()"
+            oninput="onEmailInput(event)"
             placeholder="请输入邮箱地址"
         />
 
         <div>
             <div class="cf-turnstile" data-sitekey="0x4AAAAAAACigkvuNg3f6TQg" data-callback="onTokenGenerated"></div>
-            <button id="fetchVerificationCode" disabled="true" onclick="fetchVerificationCode()">发送验证码</button>
+            <button id="fetch-verification-code" onclick="fetchVerificationCode(event)">发送验证码</button>
         </div>
 
-        <input type="text" name="verify-code" id="verify-code" disabled="true" oninput="onVerifyCodeInput()" required placeholder="请输入验证码"/>
+        <input type="text" name="code" id="verify-code" disabled="true" oninput="onVerifyCodeInput(event)" required placeholder="请输入验证码"/>
 
         <button type="submit" class="button" id="login" disabled="true">
             <span class="button__text">登录</span>
@@ -50,27 +48,26 @@
             let phone = document.querySelector('#phone')
             let valid = /^\d{10}$/.test(phone.value)
             if (valid && window.token) {
-                document.querySelector("#fetchVerificationCode").disabled = false
+                document.querySelector("#fetch-verification-code").disabled = false
             }
         }
-        function onEmailInput() {
+        function onEmailInput(event) {
             let email = document.querySelector('#email')
-            let valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)
+            let valid = email.checkValidity()
             console.log(`email valid: ${valid}`)
 
-            document.querySelector("#fetchVerificationCode").disabled = !(valid && window.token)
+            document.querySelector("#fetch-verification-code").disabled = !(valid && window.token)
         }
-        function onEmailChange() {
-            let email = document.querySelector('#email')
-            let valid = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)
-            if (!valid) email.reportValidity()
-        }
-        function onVerifyCodeInput() {
-            let code = document.querySelector('#verify-code').value
+        function onVerifyCodeInput(event) {
+            let code = event.target.value
             document.querySelector("#login").disabled = code.length == 0
         }
-        function fetchVerificationCode() {
-            let btn = document.querySelector("#fetchVerificationCode")
+        function fetchVerificationCode(event) {
+            if (!document.querySelector('#email').checkValidity() || !window.token) {
+                return
+            }
+            event.preventDefault()
+            let btn = event.target
             btn.disabled = true
             let i=60
 
@@ -114,14 +111,18 @@
                 }
             })
         }
-        function login(event) {
+        function doLogin(event) {
             event.preventDefault()
             const form = event.target
 
             const method = form.method
             const action = form.action
             const formData = new FormData(form)
-            const data = Object.fromEntries(formData.entries())
+            let data = Object.fromEntries(formData.entries())
+            data = {
+                email: data.email,
+                code: data.code,
+            }
 
             const theButton = form.querySelector('[type="submit"]')
             if (theButton.classList.contains('button--loading')) {
