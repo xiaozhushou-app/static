@@ -10,7 +10,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/css/look_great.css">
 </head>
 <body>
-    <div id="userInfo"></div>
+    <div id="userInfo">
+        <label for="email">邮箱：</label><span id="email"></span><br>
+        <label for="phone">手机号：</label><span id="phone"></span><br>
+        <label for="freetrial_until">试用到期时间：</label><span id="freetrial_until"></span><br>
+        <label for="premium_until">会员到期时间：</label><span id="premium_until"></span><br>
+        <label for="created_at">账号创建时间：</label><span id="created_at"></span><br>
+    </div>
 
 
     <form id="exchange_premium_code" method="POST" action="/app/exchange-premium-code" enctype="multipart/form-data" onsubmit="exchange(event)">
@@ -19,7 +25,7 @@
         <input type="text" id="uuid" name="uuid" hidden="true" required placeholder="">
         <br>
         <button type="submit" class="button">
-            <span class="button__text">提交</span>
+            <span class="button__text">兑换</span>
         </button>
     </form>
 
@@ -83,6 +89,16 @@
             .finally(() => theButton.classList.toggle("button--loading"))
         }
 
+        // YYYY-MM-DD hh:mm:ss
+        function formatDateTime(date = new Date()) {
+          const year = date.toLocaleString('default', {year: 'numeric'});
+          const month = date.toLocaleString('default', {month: '2-digit'});
+          const day = date.toLocaleString('default', {day: '2-digit'});
+
+          return [year, month, day].join('-') + ' ' + [date.getHours(), date.getMinutes(), date.getSeconds()].join(':');
+        }
+
+
         window.onload = function() {
             if (!window.app) return;
             // app.dismiss()
@@ -100,23 +116,20 @@
             document.querySelector('#uuid').value = userInfo.uuid
 
             let container = document.querySelector('#userInfo')
-            container.innerHTML = ""
 
             for (let o in userInfo) {
-                let p = document.createElement('p')
-                let label = document.createElement('label')
-                let div = document.createElement('div')
-                label.innerHTML = o + ':'
-                div.innerHTML = userInfo[o]
-                p.appendChild(label)
-                p.appendChild(div)
-
-                container.appendChild(p)
+                if (o.endsWith('until')) {
+                    userInfo[o] = formatDateTime(new Date(userInfo[o]))
+                }
+                let tag = container.querySelector(`#${o}`)
+                if (tag) {
+                    tag.innerHTML = userInfo[o]
+                }
             }
             // userInfo.uuid
             // userInfo.email
             // userInfo.phone
-            // userInfo.freetrial_until
+            // userInfo.freetrial_until  // "2023-03-01 08:13:50.450563+00:00" or "2023-03-01T08:13:50.450563+00:00";
             // userInfo.premium_until
             // userInfo.comment
             // userInfo.version
