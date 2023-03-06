@@ -94,7 +94,7 @@
 
             fetch(action, {
                 method: method,
-                // headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData,
             })
             .then(async res => {
