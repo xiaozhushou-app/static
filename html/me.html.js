@@ -84,7 +84,8 @@
             const method = form.method
             const action = form.action
             const formData = new FormData(form)
-            console.log('req body:', Object.fromEntries(formData.entries()))
+            const jsonBody = Object.fromEntries(formData.entries())
+            console.log('req body:', jsonBody)
 
             const theButton = form.querySelector('[type="submit"]')
             if (theButton.classList.contains('button--loading')) {
@@ -94,8 +95,8 @@
 
             fetch(action, {
                 method: method,
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: formData,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(jsonBody),
             })
             .then(async res => {
                 if (res.ok) {
@@ -122,6 +123,7 @@
                 // app.toast(app.getJwt())
                 // app.dismiss()
                 window.onload() // refresh page
+                console.toast('兑换成功!')
             })
             .catch(e => {
                 console.error('Error:', e)
