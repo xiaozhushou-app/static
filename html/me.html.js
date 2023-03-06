@@ -18,21 +18,36 @@
         <label for="created_at">账号创建时间：</label><span id="created_at"></span><br>
     </div>
 
-    <span>朋友圈文案过滤：</span>
-    <label class="toggle">
-        <input type="checkbox" id="pyq_title_filter_toggle" onclick="onPyqTitleFilterClick(event)">
-        <span class="slider round"></span>
-    </label>
 
-    <form id="exchange_premium_code" method="POST" action="/app/exchange-premium-code" enctype="multipart/form-data" onsubmit="exchange(event)">
-        <label for="premium_code">激活码：</label><br>
-        <textarea name="premium_code" required placeholder="请输入激活码"></textarea>
-        <input type="text" id="uuid" name="uuid" hidden="true" required placeholder="">
-        <br>
-        <button type="submit" class="button">
-            <span class="button__text">兑换</span>
-        </button>
-    </form>
+    <details open>
+        <summary style="display:none;"></summary>
+        <div>
+            <span>朋友圈文案过滤</span>
+            <label class="toggle">
+                <input type="checkbox" id="pyq_title_filter_toggle" onclick="onPyqTitleFilterClick(event)">
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        <form style="display:none;" id="pyq-filter-rules" onsubmit="savePyqFilterRules(event)">
+            <textarea name="pyq-filter-rules" required placeholder="过滤规则"></textarea>
+            <button type="submit" class="button">
+                <span class="button__text">保存</span>
+            </button>
+        </form>
+    </details>
+
+
+    <details>
+        <summary>会员时长兑换</summary>
+        <form id="exchange_premium_code" method="POST" action="/app/exchange-premium-code" enctype="multipart/form-data" onsubmit="exchange(event)">
+            <textarea name="premium_code" required placeholder="请输入激活码"></textarea>
+            <input type="hidden" id="uuid" name="uuid" required>
+            <button type="submit" class="button">
+                <span class="button__text">兑换</span>
+            </button>
+        </form>
+    </details>
 
     <!-- <button onclick="dismiss()">关闭页面</button> -->
 
@@ -104,8 +119,27 @@
         }
 
         function onPyqTitleFilterClick(event) {
+            let filter_rules = document.querySelector('#pyq-filter-rules')
+            filter_rules.style.display = event.target.checked ? 'block' : 'none'
+
             if (!window.app) return;
             app.setFilterToggle(event.target.checked)
+        }
+
+        function savePyqFilterRules(event) {
+            event.preventDefault()
+            const form = event.target
+
+            const formData = new FormData(form)
+            const rules = formData.get('pyq-filter-rules')
+
+            if (!window.app) return;
+            app.setFilterTitleRules(rules)
+            if (app.getFilterTitleRules() == rules) {
+                app.toast("保存成功")
+            }
+            // let objData = Object.fromEntries(formData.entries())
+            // console.log('objData:', objData)
         }
 
         window.onload = function() {
@@ -129,6 +163,7 @@
 
             document.querySelector('#uuid').value = userInfo.uuid
             document.querySelector('#pyq_title_filter_toggle').checked = app.getFilterToggle()
+            document.querySelector('[name="pyq-filter-rules"]').value = app.getFilterTitleRules()
 
             let container = document.querySelector('#userInfo')
 
