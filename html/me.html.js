@@ -99,7 +99,7 @@
                 if (res.ok) {
                     return await res.json()
                 }
-                if (window.app) app.log(`${method} ${action} res is not ok, status: ${res.status} ${res.statusText}`)
+                if (window.app) console.log(`${method} ${action} res is not ok, status: ${res.status} ${res.statusText}`)
                 return await Promise.reject(await res.text())
             })
             .then(res => {
@@ -110,7 +110,7 @@
                 if (!window.app) return;
 
 
-                app.log(`exchange response data: ` + JSON.stringify(res))
+                console.log(`exchange response data: `, res)
                 if (res.errcode != 0) {
                     app.alert('error', res.errmsg)
                     return
@@ -125,8 +125,8 @@
                 console.error('Error:', e)
 
                 if (!window.app) return;
-                app.log(`Error: ${e}`)
-                app.alert(`Error: ${e}`)
+                console.log(`Error:`, e)
+                app.alert(`Error`, `${e}`)
             })
             .finally(() => theButton.classList.toggle("button--loading"))
         }

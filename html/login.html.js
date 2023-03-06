@@ -10,6 +10,7 @@
     <title>Try Turnstile</title>
 
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/js/log.js" async defer></script>
 
 </head>
 <body>
@@ -101,13 +102,13 @@
                     console.log(`get-verification-code success`)
                 } else {
                     console.error(`get-verification-code failed:`, res)
-                    if (window.app) app.log('res: ' + JSON.stringify(res))
+                    if (window.app) console.log('res: ', res)
                 }
             }).catch(error => {
                 console.error('Error:', error)
                 if (window.app) {
-                    app.log(error)
-                    app.alert(`Error: ${error}`)
+                    console.log(error)
+                    app.alert(`Error`,`${error}`)
                 }
             })
         }
@@ -152,7 +153,7 @@
                 if (!window.app) return;
 
 
-                app.log(`login data: ` + JSON.stringify(res))
+                console.log(`login data: `, res)
                 if (res.errcode != 0) {
                     app.alert('error', res.errmsg)
                     return
@@ -169,8 +170,8 @@
                 console.error('Error:', e)
 
                 if (!window.app) return;
-                app.log(`Error: ${e}`)
-                app.alert(`Error: ${e}`)
+                console.log(`Error:`, e)
+                app.alert(`Error:`, `${e}`)
             })
             .finally(() => theButton.classList.toggle("button--loading"))
         }
