@@ -92,7 +92,7 @@
             fetch('/app/get-verification-code', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json' // 'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json' // 'Content-Type': 'application/x-www-form-urlencoded', // multipart/form-data
                 },
                 body: JSON.stringify(data) // body data type must match "Content-Type" header
             })

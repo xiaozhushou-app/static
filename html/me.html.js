@@ -84,6 +84,7 @@
             const method = form.method
             const action = form.action
             const formData = new FormData(form)
+            console.log('req body:', Object.fromEntries(formData.entries()))
 
             const theButton = form.querySelector('[type="submit"]')
             if (theButton.classList.contains('button--loading')) {
@@ -93,6 +94,7 @@
 
             fetch(action, {
                 method: method,
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData,
             })
             .then(async res => {
@@ -184,7 +186,10 @@
             window.userInfo = userInfo
 
             document.querySelector('#uuid').value = userInfo.uuid
-            document.querySelector('#pyq_title_filter_toggle').checked = app.getFilterToggle()
+            const toggle = document.querySelector('#pyq_title_filter_toggle')
+            if (toggle.checked != app.getFilterToggle()) {
+                toggle.click()
+            }
             document.querySelector('[name="pyq-filter-rules"]').value = app.getFilterTitleRules()
 
             let container = document.querySelector('#userInfo')
