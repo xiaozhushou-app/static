@@ -8,6 +8,8 @@
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/css/look_great.css">
+
+    <script src="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/js/log.js" async defer></script>
 </head>
 <body>
     <div id="userInfo">
@@ -49,11 +51,30 @@
         </form>
     </details>
 
+    <details>
+        <summary>test script</summary>
+        <form onsubmit="testScript(event)">
+            <textarea name="script" required placeholder="input script here"></textarea>
+            <button type="submit" class="button">
+                <span class="button__text">run</span>
+            </button>
+        </form>
+    </details>
+
     <!-- <button onclick="dismiss()">关闭页面</button> -->
 
     <script type="text/javascript">
         function dismiss() {
             if (window.app) app.dismiss()
+        }
+
+        function testScript(event) {
+            event.preventDefault()
+            const form = event.target
+            const formData = new FormData(form)
+            const script = formData.get('script')
+
+            try{eval(script)}catch(e){alert(e)}
         }
 
         function exchange(event) {
@@ -78,6 +99,7 @@
                 if (res.ok) {
                     return await res.json()
                 }
+                if (window.app) app.log(`${method} ${action} res is not ok, status: ${res.status} ${res.statusText}`)
                 return await Promise.reject(await res.text())
             })
             .then(res => {
@@ -168,7 +190,7 @@
             let container = document.querySelector('#userInfo')
 
             for (let o in userInfo) {
-                if (o.endsWith('until')) {
+                if (o.endsWith('until') || o == 'created_at') {
                     userInfo[o] = formatDateTime(new Date(userInfo[o]))
                 }
                 let tag = container.querySelector(`#${o}`)
