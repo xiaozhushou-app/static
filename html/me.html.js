@@ -141,7 +141,7 @@
           const month = date.toLocaleString('default', {month: '2-digit'});
           const day = date.toLocaleString('default', {day: '2-digit'});
 
-          return [year, month, day].join('-') + ' ' + [date.getHours(), date.getMinutes(), date.getSeconds()].join(':');
+          return [year, month, day].join('-') + ' ' + [date.getHours(), date.getMinutes(), date.getSeconds()].map(v=>v.toString().padStart(2, '0')).join(':');
         }
 
         function onPyqTitleFilterClick(event) {
