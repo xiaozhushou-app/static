@@ -42,7 +42,7 @@
 
     <details>
         <summary>会员时长兑换</summary>
-        <form id="exchange_premium_code" method="POST" action="/app/exchange-premium-code" enctype="multipart/form-data" onsubmit="exchange(event)">
+        <form id="exchange_premium_code" method="POST" action="/app/exchange-premium-code" onsubmit="exchange(event)">
             <textarea name="premium_code" required placeholder="请输入激活码"></textarea>
             <input type="hidden" id="uuid" name="uuid" required>
             <button type="submit" class="button">
@@ -94,7 +94,7 @@
 
             fetch(action, {
                 method: method,
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                // headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData,
             })
             .then(async res => {
