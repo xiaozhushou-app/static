@@ -35,7 +35,7 @@
   let reader = document.createElement('textarea')
 
   writer.style.display = 'none'
-  writer.readonly = true
+  writer.readOnly = true
   reader.rows = 1
   reader.onkeypress = event => {
       let target = event.target
