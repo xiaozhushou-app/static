@@ -37,14 +37,15 @@
   writer.style.display = 'none'
   writer.readOnly = true
   reader.rows = 1
+  reader.placeholder = 'repl'
   reader.onkeypress = event => {
       let target = event.target
       if (event.charCode == 13) {
           let s = target.value.trim()
-          if (s == '') return;
 
           target.value = ''
           event.preventDefault()
+          if (s == '') return;
 
           appenLine(writer, s)
 
