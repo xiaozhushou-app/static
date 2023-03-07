@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/css/look_great.css">
 
     <script src="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/js/log.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/js/repl.js" async defer></script>
 </head>
 <body>
     <div id="userInfo">
@@ -51,30 +52,13 @@
         </form>
     </details>
 
-    <details>
-        <summary>test script</summary>
-        <form onsubmit="testScript(event)">
-            <textarea name="script" required placeholder="input script here"></textarea>
-            <button type="submit" class="button">
-                <span class="button__text">run</span>
-            </button>
-        </form>
-    </details>
+    <div class="repl-it"></div>
 
     <!-- <button onclick="dismiss()">关闭页面</button> -->
 
     <script type="text/javascript">
         function dismiss() {
             if (window.app) app.dismiss()
-        }
-
-        function testScript(event) {
-            event.preventDefault()
-            const form = event.target
-            const formData = new FormData(form)
-            const script = formData.get('script')
-
-            try{eval(script)}catch(e){alert(e)}
         }
 
         function exchange(event) {
