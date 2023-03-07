@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/css/look_great.css">
 
     <script src="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/js/log.js" async defer></script>
-    <script src="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/js/repl.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/js/repl-it.js" async defer></script>
 </head>
 <body>
     <div id="userInfo">
