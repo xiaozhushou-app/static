@@ -1,6 +1,68 @@
 // <div class="repl-it"></div>
 
 (() => {
+  const simulate_arrow_keys = (reader, dokeyupdown) => {
+    let identifier = null
+    let touchTarget = null
+    let touchStartX = null
+    let touchStartY = null
+    let touchNowX = null
+    let touchNowY = null
+    let touchTimestamp = null
+    let intervalID = null
+
+    reader.ontouchstart = event=> {
+      if (identifier != null) return;
+
+      let touch = event.targetTouches[0]
+      identifier = touch.identifier
+      touchTarget = touch.target
+      touchStartX = touch.clientX
+      touchStartY = touch.clientY
+      touchNowX = touchStartX
+      touchNowY = touchStartY
+      touchTimestamp = new Date().getTime()
+
+      if (intervalID) clearInterval(intervalID);
+      intervalID = setInterval(()=>{
+          if (identifier == null) {
+              if (intervalID) clearInterval(intervalID);
+              intervalID = null
+          }
+          const x = touchNowX > touchStartX ? 'right' : 'left'
+          const y = touchNowY > touchStartY ? 'down' : 'up'
+          dokeyupdown(touchTarget, y == 'up')
+      }, 200)
+    }
+    reader.ontouchmove = event=> {
+      if (identifier == null) return;
+      event.preventDefault()
+
+      let touch = null
+      for (let i=0; i < event.changedTouches.length; i++) {
+        if (event.changedTouches.item(i).identifier == identifier) {
+          touch = event.changedTouches.item(i)
+          break
+        }
+      }
+      if (!touch) return;
+
+      touchNowX = touch.clientX
+      touchNowY = touch.clientY
+    }
+    reader.ontouchend = event=> {
+      if (identifier == null) return;
+
+      for (let i=0; i < event.changedTouches.length; i++) {
+        if (event.changedTouches.item(i).identifier == identifier) {
+          identifier = null
+          return
+        }
+      }
+    }
+  }
+
+
   let localStorage = window.localStorage || {getItem(){return []}, setItem(){}}
   let history = JSON.parse(localStorage.getItem('repl-history') || '[]')
   window.addEventListener('beforeunload', event => localStorage.setItem('repl-history', JSON.stringify(history)))
@@ -54,38 +116,46 @@
     writer.readOnly = true
     reader.rows = 1
     reader.placeholder = 'repl'
-    reader.onkeydown = event => {
+    const dokeyupdown = (target, isup) => {
       if (history.length == 0) return;
-      switch (event.keyCode) {
-      case KEY_UP: {
+      if (isup){
         if(his_idx == null) {
           his_idx = -1
-          cmp_cache = event.target.value
+          cmp_cache = target.value
         } else {
-          if(his_idx <= - history.length) return;
+          if(his_idx <= - history.length) return true;
           his_idx -= 1
         }
-        break;
-      }
-      case KEY_DOWN: {
-        if(his_idx == null) return;
+      }else{
+        if(his_idx == null) return true;
         his_idx += 1;
         if(his_idx > -1) his_idx = null;
-        break;
       }
-      case KEY_ENTER: cmp_cache = ''; his_idx=null; return;
-      default: return;
-      }
-      event.preventDefault()
 
       if (his_idx == null) {
-          event.target.value = cmp_cache
+          target.value = cmp_cache
           return;
       }
       const idx = history.length + his_idx
 
-      event.target.value = history[idx]
+      target.value = history[idx]
+    }
 
+    simulate_arrow_keys(reader, dokeyupdown)
+
+    reader.onkeydown = event => {
+      let target = event.target
+      keyCode = event.keyCode
+
+      if (keyCode == KEY_ENTER) {
+        cmp_cache = '';
+        his_idx=null;
+        return
+      }
+      if (keyCode != KEY_UP && keyCode != KEY_DOWN) return;
+      event.preventDefault()
+
+      dokeyupdown(target, keyCode == KEY_UP)
     }
     reader.onkeypress = event => {
       let target = event.target
