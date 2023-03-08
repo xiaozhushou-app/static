@@ -52,7 +52,11 @@
         </form>
     </details>
 
-    <div class="repl-it"></div>
+    <details>
+        <summary>repl</summary>
+        <div class="repl-it"></div>
+    </details>
+
 
     <!-- <button onclick="dismiss()">关闭页面</button> -->
 
