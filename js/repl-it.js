@@ -31,7 +31,7 @@
           }
           const x = touchNowX > touchStartX ? 'right' : 'left'
           const y = touchNowY > touchStartY ? 'down' : 'up'
-          if (Math.abs(touchNowY - touchStartY) < 15) return;
+          if (Math.abs(touchNowY - touchStartY) < 20) return;
           dokeyupdown(touchTarget, y == 'up')
       }, 300)
     }
