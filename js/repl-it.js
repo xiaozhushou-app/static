@@ -91,13 +91,14 @@
   const appenLine = (textarea, line) => {
     if (textarea.style.display != '') {
         textarea.style.display = ''
+        textarea.rows = 10;
     } else {
         textarea.value += '\n'
     }
     textarea.value += get_ts() + ' ' + line
-    let rows = textarea.value.split('\n').length
-    if (rows > 10) rows = 10;
-    textarea.rows = rows;
+    // let rows = textarea.value.split('\n').length
+    // if (rows > 10) rows = 10;
+    // textarea.rows = rows;
     textarea.scrollBy(0, textarea.scrollHeight)
   }
 
@@ -178,6 +179,7 @@
           }
 
           appenLine(writer, res)
+          reader.scrollIntoView(false)
       }
     }
 
