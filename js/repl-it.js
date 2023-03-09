@@ -31,8 +31,9 @@
           }
           const x = touchNowX > touchStartX ? 'right' : 'left'
           const y = touchNowY > touchStartY ? 'down' : 'up'
+          if (Math.abs(touchNowY - touchStartY) < 15) return;
           dokeyupdown(touchTarget, y == 'up')
-      }, 200)
+      }, 300)
     }
     reader.ontouchmove = event=> {
       if (identifier == null) return;
