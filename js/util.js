@@ -13,3 +13,18 @@ function detectOS() {
             && navigator.platform !== "iPhone") os = 'iPadOS';
     return os
 }
+function checkCookies() {
+    return navigator.cookieEnabled == true
+}
+function getUrlHash() {
+    return window.location.hash // new URL(document.URL).hash
+}
+//  JavaScript compression
+// https://nodeca.github.io/pako/
+// https://cdn.jsdelivr.net/gh/nodeca/pako@2.1.0/dist/pako.min.js
+function compress(data) {
+    pako.deflate(data)
+}
+function uncompress(compressed) {
+    pako.inflate(compressed, {to: 'string'})
+}
