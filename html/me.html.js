@@ -204,7 +204,9 @@
 
         function loadFilterPriceRules(event) {
             const textarea = document.querySelector('[name="pyq-filter-rules"]')
-            textarea.value = JSON.stringify(JSON.parse(textarea.value).concat(defaultFilterPriceRules), null, 2)
+            let v = textarea.value
+            if (v == '') v = '[]';
+            textarea.value = JSON.stringify(JSON.parse(v).concat(defaultFilterPriceRules), null, 2)
         }
 
         window.onload = function() {
