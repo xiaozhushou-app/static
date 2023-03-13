@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>test</title>
+
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/css/look_great.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.min.css">
+
+
+    <script type="text/javascript">
+        function onPakoLoaded(event) {
+            console.log('onPakoLoaded:', event.target)
+            const compressed = pako.deflate('hello world')
+            console.log('pako.inflate:', pako.inflate(compressed, {to: 'string'}))
+        }
+    </script>
+
+    <!-- <script src="https://cdn.jsdelivr.net/gh/xiaozhushou-app/static@main/js/repl-it.js" async defer></script> -->
+    <script src="https://xiaozhushou.kaixin.de:8443/js/repl-it.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/gh/nodeca/pako@2.1.0/dist/pako.min.js" async onload="onPakoLoaded(event)"></script>
+    <script src="https://www.nayuki.io/res/qr-code-generator-library/qrcodegen.js" async defer></script>
+    <!-- <script src="https://www.nayuki.io/res/qr-code-generator-library/qrcodegen-input-demo.js" async defer></script> -->
+    <!-- <script src="file:///Users/hangj/dev/github/static/js/repl-it.js" async defer></script> -->
+</head>
+<body>
+
+    <details>
+        <summary>repl</summary>
+        <div class="repl-it"></div>
+    </details>
+
+    <div class="uni-clipboard">
+        <textarea id='container'></textarea>
+        <button onclick="setClipboard(event)">save</button>
+        <button onclick="getClipboard(event)">get</button>
+        <button onclick="generateQRCode(event)">generate QR Code</button>
+
+        <br>
+        <div id="qrcode-container"></div>
+    </div>
+
+
+
+
+    <script type="text/javascript">
+        // javascript:if(clearRepl)clearRepl()
+        function clearRepl() {
+            document.querySelectorAll('div.repl-it').forEach(node=>{pNode=node.parentNode;pNode.tagName.toUpperCase()=='DETAILS'?pNode.parentNode.removeChild(pNode):pNode.removeChild(node)})
+        }
+
+        // Returns a string of SVG code for an image depicting the given QR Code, with the given number
+        // of border modules. The string always uses Unix newlines (\n), regardless of the platform.
+        function toSvgString(qr, border, lightColor, darkColor) {
+            if (border < 0)
+                throw new RangeError("Border must be non-negative");
+            let parts = [];
+            for (let y = 0; y < qr.size; y++) {
+                for (let x = 0; x < qr.size; x++) {
+                    if (qr.getModule(x, y))
+                        parts.push(`M${x + border},${y + border}h1v1h-1z`);
+                }
+            }
+            return `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 ${qr.size + border * 2} ${qr.size + border * 2}" stroke="none">
+    <rect width="100%" height="100%" fill="${lightColor}"/>
+    <path d="${parts.join(" ")}" fill="${darkColor}"/>
+</svg>
+`;
+        }
+
+        function generateQRCode() {
+            const text = document.querySelector('#container').value
+
+            const border = 2;
+            const lightColor = '#FFFFFF'
+            const darkColor = '#000000'
+            // Name abbreviated for the sake of these examples here
+            const QRC = qrcodegen.QrCode;
+
+            // Simple operation
+            // QRC.encodeBinary(arrayBuffer, QRC.Ecc.MEDIUM)
+            const qr = QRC.encodeText(text, QRC.Ecc.MEDIUM);
+            const code = toSvgString(qr, border, lightColor, darkColor);  // See qrcodegen-input-demo
+            let svg = new DOMParser().parseFromString(code, 'text/html').body.children[0];
+            svg.style.width = svg.style.height = '200px';
+
+            document.querySelector('#qrcode-container').innerHTML = '';
+            document.querySelector('#qrcode-container').appendChild(svg);
+        }
+
+        function b64Encode(str) {
+          return btoa(encodeURIComponent(str));
+        }
+
+        function b64Decode(str) {
+          return decodeURIComponent(atob(str));
+        }
+
+        // curl -X PUT -H 'Content-Type: application/json' -d '{"hello":"world"}' 'https://stuns5.lafyun.com/clipboard?id='
+        // curl -X GET 'https://stuns5.lafyun.com/clipboard?id='
+        function getClipboard() {
+            const hash = window.location.hash.substring(1)
+            console.log('hash:', hash)
+            if (hash.length == 0) return;
+            const hashData = JSON.parse(b64Decode(hash))
+            const id = hashData.id
+            const token = hashData.token
+
+            fetch('https://stuns5.lafyun.com/clipboard?id='+id, {
+                method: 'GET',
+                headers: {'Authorization': 'Bearer ' + token},
+            })
+                .then(async res => {
+                    console.log('res:', res)
+                    if (res.ok) {
+                        return await res.json()
+                    } else {
+                        return Promise.reject(await res.text())
+                    }
+                })
+                .then(res => {
+                    console.log('clipboard:', res)
+                    document.querySelector('#container').value = res.data
+                })
+                .catch(error => {console.error(error);alert(error)})
+        }
+        function setClipboard() {
+            const hash = window.location.hash.substring(1)
+            if (hash.length == 0) return;
+            const hashData = JSON.parse(b64Decode(hash))
+            const id = hashData.id
+            const token = hashData.token
+
+            const s = document.querySelector('#container').value
+            fetch('https://stuns5.lafyun.com/clipboard?id='+id, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                },
+                body: JSON.stringify({data: s}),
+            })
+                .then(async res => {
+                    if (res.ok) {
+                        alert('saved')
+                    } else {
+                        const text = await res.text()
+                        console.error(text)
+                        alert(text)
+                    }
+                })
+                .catch(error => {console.error(error); alert(error)})
+        }
+
+        window.onload = getClipboard;
+
+    </script>
+</body>
+</html>

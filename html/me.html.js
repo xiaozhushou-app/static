@@ -32,12 +32,21 @@
             </label>
         </div>
 
-        <form style="display:none;" id="pyq-filter-rules" onsubmit="savePyqFilterRules(event)">
-            <textarea name="pyq-filter-rules" required placeholder="过滤规则"></textarea>
-            <button type="submit" class="button">
-                <span class="button__text">保存</span>
-            </button>
-        </form>
+        <div style="display:none;" id="pyq-filter-rules">
+            <form onsubmit="savePyqFilterRules(event)">
+                <textarea name="pyq-filter-rules" required placeholder="过滤规则"></textarea>
+                <button type="submit" class="button">
+                    <span class="button__text">保存</span>
+                </button>
+            </form>
+
+            <details>
+                <summary>加载常用过滤规则</summary>
+                <button class="button" onclick="loadFilterPriceRules(event)">
+                    <span class="button__text">价格过滤</span>
+                </button>
+            </details>
+        </div>
     </details>
 
 
@@ -146,6 +155,16 @@
 
             const formData = new FormData(form)
             const rules = formData.get('pyq-filter-rules')
+            try {
+                const r = JSON.parse(rules)
+                if (!(r instanceof Array)) {
+                    alert(`content must be an array of rules.\n\nExample: [{"regex": "hello", "replacement": ""}]`)
+                    return
+                }
+            } catch(e) {
+                alert(`content can not parse to JSON`)
+                return
+            }
 
             if (!window.app) return;
             app.setFilterTitleRules(rules)
@@ -154,6 +173,38 @@
             }
             // let objData = Object.fromEntries(formData.entries())
             // console.log('objData:', objData)
+        }
+
+        const defaultFilterPriceRules = [
+            {
+                "regex": "(?<=sml)\\s*\\d{6,}",
+                "replacement": ""
+            },
+            {
+                "regex": "(零售|批发|代理|秒|本地自取|price|特)价?\\s*[:：]?\\s*\\d+",
+                "replacement": ""
+            },
+            {
+                "regex": "\\d+\\s*元",
+                "replacement": ""
+            },
+            {
+                "regex": "\\d+\\s*/\\s*[条盒张件双套]",
+                "replacement": ""
+            },
+            {
+                "regex": "特?(?<!z)[pP𝐏@¥$批得🉐️🔍💰]\\s*[:：]?\\s*\\d+",
+                "replacement": ""
+            },
+            {
+                "regex": "\n+",
+                "replacement": "\n"
+            }
+        ]
+
+        function loadFilterPriceRules(event) {
+            const textarea = document.querySelector('[name="pyq-filter-rules"]')
+            textarea.value = JSON.stringify(JSON.parse(textarea.value).concat(defaultFilterPriceRules), null, 2)
         }
 
         window.onload = function() {
